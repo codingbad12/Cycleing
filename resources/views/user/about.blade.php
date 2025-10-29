@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('user.layouts.app  ')
 
 @section('content')
 <!-- Hero Section -->
@@ -25,7 +25,7 @@
                 <p>Today, SeaVoyage continues to expand its fleet and services, always staying true to our core values of excellence, safety, and customer satisfaction.</p>
             </div>
         </div>
-        
+
         <div class="row align-items-center mb-5 flex-lg-row-reverse">
             <div class="col-lg-6 mb-4 mb-lg-0">
                 <img src="https://placehold.co/600x400?text=Our+Mission" alt="Our Mission" class="img-fluid rounded shadow">

@@ -53,7 +53,7 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{ Auth::user()->name }}
+                                    {{ Auth::user()->profil->nama }}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="#">My Bookings</a></li>
@@ -126,15 +126,15 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         })
-        
+
         // Wishlist functionality
         document.addEventListener('DOMContentLoaded', function() {
             const wishlistButtons = document.querySelectorAll('.wishlist-btn');
-            
+
             wishlistButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const shipId = this.getAttribute('data-ship-id');
-                    
+
                     // Toggle wishlist icon
                     const icon = this.querySelector('i');
                     if (icon.classList.contains('far')) {
@@ -144,19 +144,19 @@
                         icon.classList.replace('fas', 'far');
                         showToast('Ship removed from wishlist!');
                     }
-                    
+
                     // In a real app, you would send an AJAX request to save the wishlist state
                     console.log('Toggled wishlist for ship ID:', shipId);
                 });
             });
-            
+
             // Toast notification function
             function showToast(message) {
                 const toast = document.createElement('div');
                 toast.className = 'toast-notification';
                 toast.textContent = message;
                 document.body.appendChild(toast);
-                
+
                 setTimeout(() => {
                     toast.classList.add('show');
                     setTimeout(() => {
@@ -167,7 +167,7 @@
                     }, 2000);
                 }, 100);
             }
-        
+
             // Hero Slideshow
             const heroSection = document.querySelector('.hero-section');
             if (heroSection) {
@@ -176,17 +176,17 @@
                     'https://placehold.co/1920x1080?text=Sailboat',
                     'https://placehold.co/1920x1080?text=Speedboat'
                 ];
-                
+
                 let currentImageIndex = 0;
-                
+
                 function changeBackgroundImage() {
                     currentImageIndex = (currentImageIndex + 1) % images.length;
                     heroSection.style.backgroundImage = `url(${images[currentImageIndex]})`;
                 }
-                
+
                 // Set initial background
                 heroSection.style.backgroundImage = `url(${images[0]})`;
-                
+
                 // Change background every 5 seconds
                 setInterval(changeBackgroundImage, 5000);
             }

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('user.layouts.app')
 
 @section('content')
 <!-- Hero Section -->
@@ -17,59 +17,30 @@
     <div class="container">
         <h2 class="text-center mb-5">Featured Ships</h2>
         <div class="row">
-            <!-- Ship Card 1 -->
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card ship-card h-100">
-                    <img src="https://placehold.co/600x400?text=Luxury+Yacht" class="card-img-top" alt="Luxury Yacht">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="ship-type">Luxury Yacht</span>
-                            <span class="ship-price">$1,500/day</span>
+            @forelse($ships as $ship)
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card ship-card h-100">
+                        <img src="{{ $ship->image ? asset('storage/' . $ship->image) : 'https://placehold.co/600x400?text=No+Image' }}" class="card-img-top" alt="{{ $ship->name }}">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="ship-type">
+                                    @foreach($ship->types as $type)
+                                        {{ $type->name }}@if(!$loop->last), @endif
+                                    @endforeach
+                                </span>
+                                <span class="ship-price">${{ number_format($ship->price_per_day, 0, ',', ',') }}/day</span>
+                            </div>
+                            <h5 class="card-title">{{ $ship->name }}</h5>
+                            <p class="card-text">{{ Str::limit($ship->description, 100) }}</p>
                         </div>
-                        <h5 class="card-title">Ocean Explorer</h5>
-                        <p class="card-text">Experience luxury on the water with this stunning 80-foot yacht featuring 3 cabins, a spacious deck, and state-of-the-art navigation.</p>
-                    </div>
-                    <div class="card-footer bg-white border-top-0">
-                        <a href="{{ route('ships.show', 1) }}" class="btn btn-outline-primary w-100">View Details</a>
+                        <div class="card-footer bg-white border-top-0">
+                            <a href="{{ route('ships.show', $ship->id) }}" class="btn btn-outline-primary w-100">View Details</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Ship Card 2 -->
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card ship-card h-100">
-                    <img src="https://placehold.co/600x400?text=Catamaran" class="card-img-top" alt="Catamaran">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="ship-type">Catamaran</span>
-                            <span class="ship-price">$900/day</span>
-                        </div>
-                        <h5 class="card-title">Twin Voyager</h5>
-                        <p class="card-text">Perfect for family trips, this 50-foot catamaran offers stability, space, and comfort with 4 cabins and a large common area.</p>
-                    </div>
-                    <div class="card-footer bg-white border-top-0">
-                        <a href="{{ route('ships.show', 2) }}" class="btn btn-outline-primary w-100">View Details</a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Ship Card 3 -->
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card ship-card h-100">
-                    <img src="https://placehold.co/600x400?text=Speedboat" class="card-img-top" alt="Speedboat">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="ship-type">Speedboat</span>
-                            <span class="ship-price">$500/day</span>
-                        </div>
-                        <h5 class="card-title">Wave Runner</h5>
-                        <p class="card-text">Feel the thrill of speed with this 30-foot speedboat, perfect for day trips and water sports adventures.</p>
-                    </div>
-                    <div class="card-footer bg-white border-top-0">
-                        <a href="{{ route('ships.show', 3) }}" class="btn btn-outline-primary w-100">View Details</a>
-                    </div>
-                </div>
-            </div>
+            @empty
+                <p class="text-center">No ships available at the moment.</p>
+            @endforelse
         </div>
         <div class="text-center mt-4">
             <a href="{{ route('ships.index') }}" class="btn btn-primary">View All Ships</a>
@@ -118,75 +89,35 @@
     <div class="container">
         <h2 class="text-center mb-5">What Our Customers Say</h2>
         <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
+            @foreach($reviews as $review)
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                @for($i = 1; $i <= 5; $i++)
+                                    @if($i <= floor($review->rating))
+                                        <i class="fas fa-star text-warning"></i>
+                                    @elseif($i - $review->rating < 1)
+                                        <i class="fas fa-star-half-alt text-warning"></i>
+                                    @else
+                                        <i class="far fa-star text-warning"></i>
+                                    @endif
+                                @endfor
+                            </div>
+                            <p class="card-text">{{ $review->comment }}</p>
                         </div>
-                        <p class="card-text">"An unforgettable experience! The yacht was immaculate and the crew was incredibly professional. Will definitely book again!"</p>
-                    </div>
-                    <div class="card-footer bg-white">
-                        <div class="d-flex align-items-center">
-                            <img src="https://placehold.co/50x50" class="rounded-circle me-3" alt="Customer">
-                            <div>
-                                <h6 class="mb-0">John Smith</h6>
-                                <small class="text-muted">Luxury Yacht Charter</small>
+                        <div class="card-footer bg-white">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ $review->user->avatar ?? 'https://placehold.co/50x50' }}" class="rounded-circle me-3" alt="Customer">
+                                <div>
+                                    <h6 class="mb-0">{{ $review->user->name }}</h6>
+                                    <small class="text-muted">{{ $review->ship->name }}</small>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                        </div>
-                        <p class="card-text">"Perfect family vacation! The catamaran was spacious and comfortable. The kids loved the water activities and we enjoyed the peaceful sailing."</p>
-                    </div>
-                    <div class="card-footer bg-white">
-                        <div class="d-flex align-items-center">
-                            <img src="https://placehold.co/50x50" class="rounded-circle me-3" alt="Customer">
-                            <div>
-                                <h6 class="mb-0">Sarah Johnson</h6>
-                                <small class="text-muted">Catamaran Rental</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star-half-alt text-warning"></i>
-                        </div>
-                        <p class="card-text">"The speedboat rental was the highlight of our trip! Fast, exciting, and the perfect way to explore the coastline. Highly recommended!"</p>
-                    </div>
-                    <div class="card-footer bg-white">
-                        <div class="d-flex align-items-center">
-                            <img src="https://placehold.co/50x50" class="rounded-circle me-3" alt="Customer">
-                            <div>
-                                <h6 class="mb-0">Michael Chen</h6>
-                                <small class="text-muted">Speedboat Adventure</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </section>

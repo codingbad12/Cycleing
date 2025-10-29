@@ -18,9 +18,9 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -44,5 +44,23 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Relation to Profil
+    public function profil()
+    {
+        return $this->hasOne(Profil::class, 'userid');
+    }
+
+    // Relation to Sewa
+    public function sewas()
+    {
+        return $this->hasMany(Sewa::class, 'userid');
+    }
+
+    // Relation to Review
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 }
