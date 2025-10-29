@@ -3,39 +3,144 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Ship;
+use App\Models\Booking;
+use Illuminate\Support\Facades\Auth;
 
 class ShipController extends Controller
 {
     public function index(Request $request)
     {
-        // In a real application, we would fetch ships from the database
-        // For now, we'll use dummy data
-        $ships = $this->getDummyShips();
+        // Fetch ships from the database
+        $query = Ship::query();
+        $activeFilters = [];
         
         // Handle search functionality
         if ($request->has('search')) {
             $search = $request->input('search');
-            $ships = collect($ships)->filter(function($ship) use ($search) {
-                return stripos($ship['name'], $search) !== false || 
-                       stripos($ship['type'], $search) !== false;
-            })->all();
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('type', 'like', "%{$search}%");
+            });
+            $activeFilters['search'] = $search;
         }
         
-        return view('user.ships.index', compact('ships'));
+        // Handle type filter
+        if ($request->has('type')) {
+            $filteredTypes = $request->input('type');
+            $query->whereIn('type', $filteredTypes);
+            $activeFilters['types'] = $filteredTypes;
+        }
+        
+        // Handle price range filter
+        if ($request->has('min_price') && $request->has('max_price')) {
+            $minPrice = (int)$request->input('min_price');
+            $maxPrice = (int)$request->input('max_price');
+            
+            if ($minPrice > 0 || $maxPrice < 2000) {
+                $query->whereBetween('price_per_day', [$minPrice, $maxPrice]);
+                $activeFilters['price_range'] = ['min' => $minPrice, 'max' => $maxPrice];
+            }
+        }
+        
+        // Handle capacity filter
+        if ($request->has('min_capacity')) {
+            $minCapacity = (int)$request->input('min_capacity');
+            if ($minCapacity > 0) {
+                $query->where('capacity', '>=', $minCapacity);
+                $activeFilters['min_capacity'] = $minCapacity;
+            }
+        }
+        
+        $ships = $query->get();
+        
+        // Get all available ship types for filter options
+        $shipTypes = Ship::distinct()->pluck('type')->filter()->values()->all();
+        
+        // Get all available amenities for filter options
+        $allAmenities = Ship::whereNotNull('features')
+            ->get()
+            ->pluck('features')
+            ->flatten()
+            ->unique()
+            ->values()
+            ->all();
+        
+        return view('user.ships.index', compact('ships', 'shipTypes', 'allAmenities', 'activeFilters'));
     }
 
     public function show($id)
     {
-        // In a real application, we would fetch the ship from the database
-        // For now, we'll use dummy data
-        $ships = $this->getDummyShips();
-        $ship = collect($ships)->firstWhere('id', $id);
+        // Fetch the ship from the database
+        $ship = Ship::findOrFail($id);
         
-        if (!$ship) {
-            abort(404);
+        // Get similar ships for "You May Also Like" section
+        $similarShips = Ship::where('id', '!=', $id)
+            ->where('type', $ship->type)
+            ->limit(3)
+            ->get();
+        
+        return view('user.ships.show', compact('ship', 'similarShips'));
+    }
+    
+    public function book(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'start_date' => 'required|date|after_or_equal:today',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'guests' => 'required|integer|min:1',
+            'captain' => 'required|string',
+        ]);
+
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
         }
-        
-        return view('user.ships.show', compact('ship'));
+
+        $ship = Ship::findOrFail($id);
+
+        $startDate = new \DateTime($validated['start_date']);
+        $endDate = new \DateTime($validated['end_date']);
+        $duration = $startDate->diff($endDate)->days + 1;
+        if ($duration > 5) {
+            return back()->withErrors(['end_date' => 'Maximum booking duration is 5 days'])->withInput();
+        }
+
+        $totalPrice = $duration * (int) $ship->price_per_day;
+
+        Booking::create([
+            'user_id' => $user->id,
+            'ship_id' => $ship->id,
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'total_price' => $totalPrice,
+            'status' => 'pending',
+            'notes' => null,
+        ]);
+
+        return redirect()->route('ships.show', $id)->with('success', 'Booking request submitted successfully!');
+    }
+    
+    /**
+     * Get user's bookings by ship type
+     */
+    private function getUserBookingsByType($shipType)
+    {
+        return [];
+    }
+    
+    /**
+     * Get ship by ID
+     */
+    private function getDummyShipById($id)
+    {
+        $ships = $this->getDummyShips();
+        foreach ($ships as $ship) {
+            if ($ship['id'] == $id) {
+                return $ship;
+            }
+        }
+        return null;
     }
 
     private function getDummyShips()

@@ -45,24 +45,38 @@
                     <ul class="navbar-nav">
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">Login</a>
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">Register</a>
+                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                             </li>
                         @else
+                            <!-- Notifications -->
+                            <li class="nav-item">
+                                <a class="nav-link position-relative" href="{{ route('notifications.index') }}">
+                                <i class="fas fa-bell"></i>
+                                @php
+                                    $unreadCount = Auth::user()->unreadNotifications->count();
+                                @endphp
+                                @if($unreadCount > 0)
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ $unreadCount > 99 ? '99+' : $unreadCount }}
+                                    </span>
+                                @endif
+                            </a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     {{ Auth::user()->name }}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">My Bookings</a></li>
-                                    <li><a class="dropdown-item" href="#">Wishlist</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('profile.show') }}">Profile</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('user.bookings.index') }}">My Bookings</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
                                         <form action="{{ route('logout') }}" method="POST">
                                             @csrf
-                                            <button type="submit" class="dropdown-item">Logout</button>
+                                            <button type="submit" class="dropdown-item">{{ __('Logout') }}</button>
                                         </form>
                                     </li>
                                 </ul>
@@ -120,6 +134,7 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
+    <script src="{{ asset('js/filter.js') }}"></script>
     <script>
         // Initialize tooltips
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
@@ -127,28 +142,7 @@
             return new bootstrap.Tooltip(tooltipTriggerEl)
         })
         
-        // Wishlist functionality
         document.addEventListener('DOMContentLoaded', function() {
-            const wishlistButtons = document.querySelectorAll('.wishlist-btn');
-            
-            wishlistButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const shipId = this.getAttribute('data-ship-id');
-                    
-                    // Toggle wishlist icon
-                    const icon = this.querySelector('i');
-                    if (icon.classList.contains('far')) {
-                        icon.classList.replace('far', 'fas');
-                        showToast('Ship added to wishlist!');
-                    } else {
-                        icon.classList.replace('fas', 'far');
-                        showToast('Ship removed from wishlist!');
-                    }
-                    
-                    // In a real app, you would send an AJAX request to save the wishlist state
-                    console.log('Toggled wishlist for ship ID:', shipId);
-                });
-            });
             
             // Toast notification function
             function showToast(message) {
