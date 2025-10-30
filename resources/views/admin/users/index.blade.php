@@ -69,7 +69,7 @@
                                 </a>
                                 <form action="{{ route('admin.users.fine', $user->id) }}" method="POST" class="d-inline">
                                     @csrf
-                                    <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Are you sure you want to fine this user Rp. 50.000 for exceeding ship booking?')">
+                                    <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Are you sure you want to fine this user Rp. 100.000 for exceeding ship booking?')">
                                         <i class="fas fa-money-bill"></i> Fine
                                     </button>
                                 </form>

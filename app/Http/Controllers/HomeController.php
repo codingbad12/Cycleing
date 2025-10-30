@@ -33,6 +33,22 @@ class HomeController extends Controller
 
     public function about()
     {
-        return view('user.about');
+        // Build slideshow images from storage/app/public/ships (same source as home)
+        $slideshowImages = [];
+        try {
+            $files = Storage::disk('public')->files('ships');
+            if (!empty($files)) {
+                // take up to 5 images
+                $files = array_values($files);
+                $files = array_slice($files, 0, 5);
+                foreach ($files as $f) {
+                    $slideshowImages[] = asset('storage/' . $f);
+                }
+            }
+        } catch (\Exception $e) {
+            // ignore and leave slideshowImages empty
+        }
+
+        return view('user.about', compact('slideshowImages'));
     }
 }

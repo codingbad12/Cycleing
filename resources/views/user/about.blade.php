@@ -2,21 +2,62 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="hero-section" style="background-image: url('https://placehold.co/1920x600?text=About+Us');">
+@if(!empty($slideshowImages) && count($slideshowImages) > 0)
+<div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        @foreach($slideshowImages as $idx => $img)
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="{{ $idx }}" class="{{ $idx==0 ? 'active' : '' }}" aria-current="{{ $idx==0 ? 'true' : 'false' }}" aria-label="Slide {{ $idx+1 }}"></button>
+        @endforeach
+    </div>
+    <div class="carousel-inner">
+        @foreach($slideshowImages as $idx => $img)
+        <div class="carousel-item {{ $idx==0 ? 'active' : '' }}" style="height: 500px;">
+            <img src="{{ $img }}" class="d-block w-100" alt="Slide {{ $idx+1 }}" style="object-fit: cover; height: 500px;">
+            <div class="carousel-caption d-none d-md-block">
+                <h3>About SeaVoyage</h3>
+                <p>Your premier destination for yacht and ship rentals</p>
+            </div>
+        </div>
+        @endforeach
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+@else
+<section class="hero-section" style="background-image: url('{{ asset('images/home/hero-yacht.jpg') }}');">
     <div class="hero-overlay">
-        <div class="hero-content container">
+        <div class="hero-content container text-center">
             <h1 class="display-4 fw-bold mb-4">About SeaVoyage</h1>
             <p class="lead mb-4">Your premier destination for yacht and ship rentals</p>
         </div>
     </div>
 </section>
+@endif
 
 <!-- About Us Content -->
 <section class="py-5">
     <div class="container">
         <div class="row align-items-center mb-5">
             <div class="col-lg-6 mb-4 mb-lg-0">
-                <img src="https://placehold.co/600x400?text=Our+Story" alt="Our Story" class="img-fluid rounded shadow">
+                @php
+                    // Provide a simple, editable map of about images. You can pass $aboutImages from the controller
+                    // to override these defaults. Keys: our_story, our_mission, cap, stew, cs
+                    $aboutImages = $aboutImages ?? [
+                        'our_story' => 'CRE1.jpg',
+                        'our_mission' => 'CRE2.jpg',
+                        'cap' => 'CAP.jpg',
+                        'stew' => 'STEW.webp',
+                        'cs' => 'CS.webp',
+                    ];
+                @endphp
+
+                <img src="{{ asset('storage/about/' . ($aboutImages['our_story'] ?? 'CRE1.jpg')) }}" alt="Our Story" class="img-fluid rounded shadow">
             </div>
             <div class="col-lg-6">
                 <h2 class="mb-4">Our Story</h2>
@@ -28,7 +69,7 @@
         
         <div class="row align-items-center mb-5 flex-lg-row-reverse">
             <div class="col-lg-6 mb-4 mb-lg-0">
-                <img src="https://placehold.co/600x400?text=Our+Mission" alt="Our Mission" class="img-fluid rounded shadow">
+                <img src="{{ asset('storage/about/' . ($aboutImages['our_mission'] ?? 'CRE2.jpg')) }}" alt="Our Mission" class="img-fluid rounded shadow">
             </div>
             <div class="col-lg-6">
                 <h2 class="mb-4">Our Mission</h2>
@@ -51,7 +92,7 @@
         <div class="row">
             <div class="col-md-4 mb-4">
                 <div class="card h-100 border-0 shadow-sm">
-                    <img src="https://placehold.co/300x300?text=Captain" class="card-img-top" alt="Team Member">
+                    <img src="{{ asset('storage/about/' . ($aboutImages['cap'] ?? 'CAP.jpg')) }}" class="card-img-top" alt="Team Member">
                     <div class="card-body text-center">
                         <h5 class="card-title">Captain Budi Santoso</h5>
                         <p class="text-muted">Founder & CEO</p>
@@ -66,7 +107,7 @@
             </div>
             <div class="col-md-4 mb-4">
                 <div class="card h-100 border-0 shadow-sm">
-                    <img src="https://placehold.co/300x300?text=Operations" class="card-img-top" alt="Team Member">
+                    <img src="{{ asset('storage/about/' . ($aboutImages['stew'] ?? 'STEW.jpg')) }}" class="card-img-top" alt="Team Member">
                     <div class="card-body text-center">
                         <h5 class="card-title">Siti Rahayu</h5>
                         <p class="text-muted">Operations Manager</p>
@@ -81,7 +122,7 @@
             </div>
             <div class="col-md-4 mb-4">
                 <div class="card h-100 border-0 shadow-sm">
-                    <img src="https://placehold.co/300x300?text=Customer" class="card-img-top" alt="Team Member">
+                    <img src="{{ asset('storage/about/' . ($aboutImages['cs'] ?? 'CS.jpg')) }}" class="card-img-top" alt="Team Member">
                     <div class="card-body text-center">
                         <h5 class="card-title">Andi Wijaya</h5>
                         <p class="text-muted">Customer Experience Director</p>
