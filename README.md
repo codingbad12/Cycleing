@@ -1,61 +1,160 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🚢 SeaVoyage
+## 🧭 Deskripsi Proyek
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**SeaVoyage** adalah platform pemesanan kapal berbasis web yang dirancang untuk memudahkan pengguna dalam melakukan penyewaan kapal dan mempermudah admin dalam mengelola data kapal, pemesanan, serta pengguna.
 
-## About Laravel
+Aplikasi ini dibangun menggunakan **Laravel 12** dengan pendekatan **MVC (Model-View-Controller)** untuk menjaga struktur kode yang bersih dan terorganisir.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 👥 Anggota Kelompok
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Nama Kelompok:** Bahlil Nautica
+**Anggota Tim:**
 
-## Learning Laravel
+* Gilang Dwi Dermawan
+* Nicholas Alexander
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## ⚓ Nama Project
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+**SeaVoyage**
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 💡 Fitur Utama
 
-### Premium Partners
+### 🔹 Admin
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+* 🚢 **Ship Management** — Tambah, ubah, hapus, dan kelola data kapal.
+* 📅 **Booking Approval** — Konfirmasi dan kelola pemesanan dari pengguna.
+* 👤 **User Management** — Kelola akun pengguna (aktif/nonaktif).
+* 🧾 **Invoices** — Cetak dan kelola invoice transaksi pemesanan.
 
-## Contributing
+### 🔹 User
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+* ⚓ **Browse Fleet** — Melihat daftar kapal yang tersedia untuk disewa.
+* 📋 **Booking List** — Melihat daftar pemesanan aktif.
+* 🕓 **Booking History** — Melihat riwayat pemesanan sebelumnya.
+* ⛵ **Booking Ships** — Melakukan penyewaan kapal secara langsung.
+* 🔔 **Notifications** — Menerima notifikasi status pemesanan dan pengembalian kapal.
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🧱 Skema Database
 
-## Security Vulnerabilities
+![Demo Project](https://drive.google.com/uc?export=view&id=1qCCNAfG2w7JG5b22JES3xyBYlRYjBTHS)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## 🎥 Demo Proyek
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+📽️ **Link Demo (Screen Recording):**
+[Klik di sini untuk melihat demo SeaVoyage](https://drive.google.com/drive/folders/1UZx8CWvxHnrReBM6n8-PD0y1WMZXrPRc?usp=sharing)
+
+---
+
+## ⚙️ Teknologi yang Digunakan
+
+| Kategori           | Teknologi                       |
+| ------------------ | ------------------------------- |
+| Framework          | Laravel 12                      |
+| Bahasa Pemrograman | PHP 8.2, JavaScript             |
+| Database           | MySQL                           |
+| Frontend           | Blade, Bootstrap 5, FontAwesome |
+| Version Control    | Git & GitHub                    |
+
+---
+
+## 🚀 Cara Menjalankan Project
+
+1. **Clone repository ini**
+
+   ```bash
+   git clone https://github.com/codingbad12/Cycleing
+   cd seavoyage
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   composer install
+   npm install && npm run dev
+   ```
+
+3. **Salin file environment**
+
+   ```bash
+   cp .env.example .env
+   ```
+
+4. **Konfigurasi database**
+   Edit file `.env` dan ubah bagian berikut:
+
+   ```
+   DB_DATABASE=seavoyage_db
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+5. **Generate application key**
+
+   ```bash
+   php artisan key:generate
+   ```
+
+6. **Jalankan migrasi dan seeder (opsional)**
+
+   ```bash
+   php artisan migrate --seed
+   ```
+
+7. **Jalankan server**
+
+   ```bash
+   php artisan serve
+   ```
+
+8. Akses di browser:
+   👉 [http://127.0.0.1:8000](http://127.0.0.1:8000)
+
+---
+
+## 📁 Struktur Direktori Penting
+
+```
+├── app/
+│   ├── Http/Controllers/      # Controller untuk user & admin
+│   ├── Models/                # Model seperti Booking, Ship, User
+│
+├── database/
+│   ├── migrations/            # Struktur tabel database
+│   ├── seeders/               # Seeder data awal
+│
+├── public/
+│   ├── storage/               # Link ke file image kapal
+│
+├── resources/
+│   ├── views/                 # Blade templates (frontend)
+│
+├── routes/
+│   ├── web.php                # Routing utama aplikasi
+```
+
+---
+
+## 📜 Lisensi
+
+Project ini dibuat untuk keperluan **tugas kelompok** dalam pembelajaran pengembangan aplikasi web menggunakan Laravel.
+
+---
+
+## ✨ Kredit
+
+Dibuat dengan ❤️ oleh
+**Bahlil Nautica Team**
+
+> **Anggota Kelompok:**  
+> [Gilang Dwi Dermawan](https://github.com/GilangDwi1) & [Nicholas Alexander](https://github.com/codingbad12)
+
