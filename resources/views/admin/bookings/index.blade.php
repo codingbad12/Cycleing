@@ -98,12 +98,9 @@
                                             <i class="fas fa-times"></i> Reject
                                         </button>
                                     </form>
-                                    @endif
-                                    
-                                    @if($status == 'return_requested')
-                                    <form action="{{ route('admin.bookings.return', $booking->id) }}" method="POST" class="d-inline">
+                                    @elseif($status == 'return_requested')
+                                    <form action="{{ route('admin.bookings.confirm-return', $booking->id) }}" method="POST" class="d-inline">
                                         @csrf
-                                        @method('PATCH')
                                         <button type="submit" class="btn btn-success btn-sm">
                                             <i class="fas fa-check"></i> Confirm Return
                                         </button>

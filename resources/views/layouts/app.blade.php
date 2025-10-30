@@ -126,7 +126,7 @@
             </div>
             <hr class="bg-light">
             <div class="text-center">
-                <p>&copy; 2023 SeaVoyage. All rights reserved.</p>
+                <p>&copy; 2025 SeaVoyage. All rights reserved.</p>
             </div>
         </div>
     </footer>

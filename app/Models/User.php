@@ -49,7 +49,7 @@ class User extends Authenticatable
             'is_admin' => 'boolean',
         ];
     }
-
+    
     /**
      * Get the bookings for the user.
      */

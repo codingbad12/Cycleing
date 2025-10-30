@@ -110,8 +110,14 @@
                                     </td>
                                     <td>
                                         @if($booking->status == 'pending')
-                                            <a href="{{ route('admin.bookings.approve', $booking->id) }}" class="btn btn-sm btn-success">Approve</a>
-                                            <a href="{{ route('admin.bookings.reject', $booking->id) }}" class="btn btn-sm btn-danger">Reject</a>
+                                            <form action="{{ route('admin.bookings.approve', $booking->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                                            </form>
+                                            <form action="{{ route('admin.bookings.reject', $booking->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-danger">Reject</button>
+                                            </form>
                                         @else
                                             <a href="{{ route('admin.bookings.show', $booking->id) }}" class="btn btn-sm btn-primary">View</a>
                                         @endif

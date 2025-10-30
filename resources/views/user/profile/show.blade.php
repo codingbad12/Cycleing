@@ -90,19 +90,21 @@
                             <tbody>
                                 @forelse($bookings as $booking)
                                 <tr>
-                                    <td>{{ $booking['ship_name'] }}</td>
-                                    <td>{{ $booking['ship_type'] }}</td>
-                                    <td>{{ $booking['start_date'] }} to {{ $booking['end_date'] }}</td>
-                                    <td>${{ number_format($booking['total_price'], 2) }}</td>
+                                    <td>{{ $booking->ship->name }}</td>
+                                    <td>{{ $booking->ship->type }}</td>
+                                    <td>{{ $booking->start_date->format('M d, Y') }} to {{ $booking->end_date->format('M d, Y') }}</td>
+                                    <td>${{ number_format($booking->total_price, 2) }}</td>
                                     <td>
-                                        @if($booking['status'] == 'completed')
+                                        @if($booking->status == 'completed')
                                             <span class="badge bg-success">Completed</span>
-                                        @elseif($booking['status'] == 'active')
-                                            <span class="badge bg-primary">Active</span>
-                                        @elseif($booking['status'] == 'pending')
+                                        @elseif($booking->status == 'active')
+                                            <span class="badge bg-info">Active</span>
+                                        @elseif($booking->status == 'pending')
                                             <span class="badge bg-warning">Pending</span>
-                                        @else
-                                            <span class="badge bg-secondary">{{ ucfirst($booking['status']) }}</span>
+                                        @elseif($booking->status == 'rejected')
+                                            <span class="badge bg-danger">Rejected</span>
+                                        @elseif($booking->status == 'return_requested')
+                                            <span class="badge bg-secondary">Return Requested</span>
                                         @endif
                                     </td>
                                 </tr>

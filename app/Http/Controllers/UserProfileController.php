@@ -28,8 +28,8 @@ class UserProfileController extends Controller
     {
         $user = Auth::user();
         
-        // Get user's booking history (using dummy data for now)
-        $bookings = $this->getDummyBookings();
+        // Get user's booking history
+        $bookings = $user->bookings()->with('ship')->latest()->get();
         
         return view('user.profile.show', compact('user', 'bookings'));
     }

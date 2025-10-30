@@ -24,7 +24,7 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     // My Bookings routes
     Route::get('/bookings', [\App\Http\Controllers\User\BookingController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/{id}', [\App\Http\Controllers\User\BookingController::class, 'show'])->name('bookings.show');
-    Route::post('/bookings/{id}/return', [\App\Http\Controllers\User\BookingController::class, 'returnShip'])->name('bookings.return');
+    Route::put('/bookings/{id}/return', [\App\Http\Controllers\User\BookingController::class, 'returnShip'])->name('bookings.return');
 });
 
 // Authentication routes
@@ -46,7 +46,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('ships', ShipManagementController::class);
     
     // Booking Management Routes
-    Route::resource('bookings', BookingController::class);
+    Route::resource('bookings', BookingController::class)->except(['approve', 'reject', 'confirm-return']);
     Route::post('/bookings/{id}/approve', [BookingController::class, 'approve'])->name('bookings.approve');
     Route::post('/bookings/{id}/reject', [BookingController::class, 'reject'])->name('bookings.reject');
     Route::post('/bookings/{id}/confirm-return', [BookingController::class, 'confirmReturn'])->name('bookings.confirm-return');

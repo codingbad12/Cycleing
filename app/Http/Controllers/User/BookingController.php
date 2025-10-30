@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,18 +24,16 @@ class BookingController extends Controller
 
     public function returnShip($id)
     {
-        $booking = Auth::user()->bookings()->findOrFail($id);
+        $booking = Auth::user()->bookings()->with('ship')->findOrFail($id);
         
-        // Check if the booking is in approved status
-        if ($booking->status !== 'approved') {
-            return redirect()->back()->with('error', 'Only approved bookings can be returned.');
+        if ($booking->status !== 'active') {
+            return back()->with('error', 'Only active bookings can be returned.');
         }
-        
-        // Update booking status
+
         $booking->status = 'return_requested';
         $booking->save();
-        
-        return redirect()->route('user.bookings.show', $id)
+
+        return redirect()->route('user.bookings.index')
             ->with('success', 'Return request submitted successfully. Please wait for admin confirmation.');
     }
 }

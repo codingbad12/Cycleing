@@ -49,6 +49,14 @@
                         </div>
                         @endforeach
                         <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="speedboat" name="type[]" value="Speedboat">
+                            <label class="form-check-label" for="speedboat">Speedboat</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="sailboat" name="type[]" value="Sailboat">
+                            <label class="form-check-label" for="sailboat">Sailboat</label>
+                        </div>
+                        <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="catamaran" name="type[]" value="Catamaran">
                             <label class="form-check-label" for="catamaran">Catamaran</label>
                         </div>

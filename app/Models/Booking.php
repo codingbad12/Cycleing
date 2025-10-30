@@ -9,6 +9,13 @@ class Booking extends Model
 {
     use HasFactory;
 
+    const STATUS_PENDING = 'pending';
+    const STATUS_APPROVED = 'approved';
+    const STATUS_ACTIVE = 'active';
+    const STATUS_RETURN_REQUESTED = 'return_requested';
+    const STATUS_COMPLETED = 'completed';
+    const STATUS_REJECTED = 'rejected';
+
     /**
      * The attributes that are mass assignable.
      *

@@ -260,7 +260,7 @@
                 </div>
             </div>
             <div class="border-t border-gray-700 mt-8 pt-6 text-center">
-                <p>&copy; 2023 Cycleing Boat Rentals. All rights reserved.</p>
+                <p>&copy; 2025 Cycleing Boat Rentals. All rights reserved.</p>
             </div>
         </div>
     </footer>

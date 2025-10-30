@@ -54,9 +54,19 @@ class BookingController extends Controller
             return redirect()->back()->with('error', 'Ship is no longer available');
         }
         
-        // Update booking status
-        $booking->status = 'approved';
+        // Update booking status based on start date
+        if (now()->startOfDay()->gte($booking->start_date->startOfDay())) {
+            $booking->status = 'active';
+        } else {
+            $booking->status = 'approved';
+        }
         $booking->save();
+
+        // If today is the start date, update to active
+        if ($booking->status === 'approved' && now()->format('Y-m-d') === $booking->start_date->format('Y-m-d')) {
+            $booking->status = 'active';
+            $booking->save();
+        }
         
         // Update ship status
         $booking->ship->status = 'rented';

@@ -39,20 +39,21 @@
                                 <span class="badge bg-success">Approved</span>
                                 @elseif($booking->status == 'rejected')
                                 <span class="badge bg-danger">Rejected</span>
+                                @elseif($booking->status == 'active')
+                                <span class="badge bg-info">Active</span>
                                 @elseif($booking->status == 'return_requested')
-                                <span class="badge bg-info">Return Requested</span>
+                                <span class="badge bg-secondary">Return Requested</span>
                                 @elseif($booking->status == 'completed')
-                                <span class="badge bg-primary">Completed</span>
+                                <span class="badge bg-success">Completed</span>
                                 @endif
                             </td>
                             <td>
                                 <a href="{{ route('user.bookings.show', $booking->id) }}" class="btn btn-sm btn-primary">View Details</a>
-                                @if($booking->status == 'approved')
+                                @if($booking->status == 'active')
                                 <form action="{{ route('user.bookings.return', $booking->id) }}" method="POST" class="d-inline">
                                     @csrf
-                                    <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Are you sure you want to return this ship?')">
-                                        Return Ship
-                                    </button>
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Are you sure you want to return this ship?')">Return Ship</button>
                                 </form>
                                 @endif
                             </td>

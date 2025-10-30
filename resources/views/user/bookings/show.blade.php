@@ -32,25 +32,10 @@
                         <span class="badge bg-success">Approved</span>
                         @elseif($booking->status == 'rejected')
                         <span class="badge bg-danger">Rejected</span>
-                        @elseif($booking->status == 'return_requested')
-                        <span class="badge bg-info">Return Requested</span>
-                        @elseif($booking->status == 'completed')
-                        <span class="badge bg-primary">Completed</span>
                         @endif
                     </p>
                 </div>
             </div>
-            
-            @if($booking->status == 'approved')
-            <div class="mt-4">
-                <form action="{{ route('user.bookings.return', $booking->id) }}" method="POST" class="d-inline">
-                    @csrf
-                    <button type="submit" class="btn btn-warning" onclick="return confirm('Are you sure you want to return this ship?')">
-                        <i class="fas fa-undo-alt"></i> Return Ship
-                    </button>
-                </form>
-            </div>
-            @endif
             
             @if($booking->notes)
             <div class="mt-4">
