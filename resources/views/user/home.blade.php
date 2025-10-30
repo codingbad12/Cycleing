@@ -2,7 +2,36 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="hero-section" style="background-image: url('https://placehold.co/1920x1080?text=Luxury+Yacht+1');">
+@if(!empty($slideshowImages) && count($slideshowImages) > 0)
+<div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        @foreach($slideshowImages as $idx => $img)
+            <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="{{ $idx }}" class="{{ $idx==0 ? 'active' : '' }}" aria-current="{{ $idx==0 ? 'true' : 'false' }}" aria-label="Slide {{ $idx+1 }}"></button>
+        @endforeach
+    </div>
+    <div class="carousel-inner">
+        @foreach($slideshowImages as $idx => $img)
+        <div class="carousel-item {{ $idx==0 ? 'active' : '' }}" style="height: 500px;">
+            <img src="{{ $img }}" class="d-block w-100" alt="Slide {{ $idx+1 }}" style="object-fit: cover; height: 500px;">
+            <div class="carousel-caption d-none d-md-block">
+                <h3>Explore Our Fleet</h3>
+                <p>Premium ships and yachts available for your next adventure</p>
+                <a href="{{ route('ships.index') }}" class="btn btn-primary">Browse Fleet</a>
+            </div>
+        </div>
+        @endforeach
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+@else
+<section class="hero-section" style="background-image: url('{{ asset('images/home/hero-yacht.jpg') }}');">
     <div class="hero-overlay">
         <div class="hero-content container text-center">
             <h1 class="display-4 fw-bold mb-4">Discover the Ultimate Yacht Experience</h1>
@@ -11,65 +40,41 @@
         </div>
     </div>
 </section>
+@endif
 
 <!-- Featured Ships Section -->
 <section class="py-5">
     <div class="container">
         <h2 class="text-center mb-5">Featured Ships</h2>
         <div class="row">
-            <!-- Ship Card 1 -->
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card ship-card h-100">
-                    <img src="https://placehold.co/600x400?text=Luxury+Yacht" class="card-img-top" alt="Luxury Yacht">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="ship-type">Luxury Yacht</span>
-                            <span class="ship-price">$1,500/day</span>
+            @forelse($featuredShips as $ship)
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card ship-card h-100">
+                        @if($ship->image)
+                            <img src="{{ asset('storage/' . $ship->image) }}" class="card-img-top" alt="{{ $ship->name }}">
+                        @else
+                            <img src="https://placehold.co/600x400?text=Ship" class="card-img-top" alt="{{ $ship->name }}">
+                        @endif
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="ship-type">{{ $ship->type }}</span>
+                                <span class="ship-price">{{ format_idr((int) $ship->price_per_day) }} / day</span>
+                            </div>
+                            <h5 class="card-title">{{ $ship->name }}</h5>
+                            @if(!empty($ship->description))
+                                <p class="card-text">{{ $ship->description }}</p>
+                            @endif
                         </div>
-                        <h5 class="card-title">Ocean Explorer</h5>
-                        <p class="card-text">Experience luxury on the water with this stunning 80-foot yacht featuring 3 cabins, a spacious deck, and state-of-the-art navigation.</p>
-                    </div>
-                    <div class="card-footer bg-white border-top-0">
-                        <a href="{{ route('ships.show', 1) }}" class="btn btn-outline-primary w-100">View Details</a>
+                        <div class="card-footer bg-white border-top-0">
+                            <a href="{{ route('ships.show', $ship->id) }}" class="btn btn-outline-primary w-100">View Details</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Ship Card 2 -->
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card ship-card h-100">
-                    <img src="https://placehold.co/600x400?text=Catamaran" class="card-img-top" alt="Catamaran">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="ship-type">Catamaran</span>
-                            <span class="ship-price">$900/day</span>
-                        </div>
-                        <h5 class="card-title">Twin Voyager</h5>
-                        <p class="card-text">Perfect for family trips, this 50-foot catamaran offers stability, space, and comfort with 4 cabins and a large common area.</p>
-                    </div>
-                    <div class="card-footer bg-white border-top-0">
-                        <a href="{{ route('ships.show', 2) }}" class="btn btn-outline-primary w-100">View Details</a>
-                    </div>
+            @empty
+                <div class="col-12">
+                    <div class="alert alert-info text-center">No ships available yet. Please check back later.</div>
                 </div>
-            </div>
-            
-            <!-- Ship Card 3 -->
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card ship-card h-100">
-                    <img src="https://placehold.co/600x400?text=Speedboat" class="card-img-top" alt="Speedboat">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="ship-type">Speedboat</span>
-                            <span class="ship-price">$500/day</span>
-                        </div>
-                        <h5 class="card-title">Wave Runner</h5>
-                        <p class="card-text">Feel the thrill of speed with this 30-foot speedboat, perfect for day trips and water sports adventures.</p>
-                    </div>
-                    <div class="card-footer bg-white border-top-0">
-                        <a href="{{ route('ships.show', 3) }}" class="btn btn-outline-primary w-100">View Details</a>
-                    </div>
-                </div>
-            </div>
+            @endforelse
         </div>
         <div class="text-center mt-4">
             <a href="{{ route('ships.index') }}" class="btn btn-primary">View All Ships</a>

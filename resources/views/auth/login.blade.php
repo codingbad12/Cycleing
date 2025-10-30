@@ -56,6 +56,7 @@
                 </div>
                 <div class="card-footer bg-light text-center py-3">
                     <p class="mb-0">Don't have an account? <a href="{{ route('register') }}" class="text-decoration-none">Register here</a></p>
+                    <button onclick="window.location.href='{{ route('admin.login') }}'" class="btn btn-link p-0 text-decoration-none">An admin? Login from here</button>
                 </div>
             </div>
         </div>

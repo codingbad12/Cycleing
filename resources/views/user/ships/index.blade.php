@@ -9,14 +9,45 @@
         <div class="col-lg-3 mb-4">
             <div class="filter-sidebar sticky-top" style="top: 20px;">
                 <h4 class="mb-3">Filters</h4>
-                <form action="{{ route('ships.index') }}" method="GET">
+                <div id="active-filters" class="mb-3">
+                    @if(isset($activeFilters) && count($activeFilters) > 0)
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach($activeFilters as $key => $value)
+                                @if($key === 'search')
+                                    <span class="badge bg-primary">Search: {{ $value }} <i class="fas fa-times"></i></span>
+                                @elseif($key === 'types')
+                                    @foreach($value as $type)
+                                        <span class="badge bg-primary">Type: {{ $type }} <i class="fas fa-times"></i></span>
+                                    @endforeach
+                                @elseif($key === 'amenities')
+                                    @foreach($value as $amenity)
+                                        <span class="badge bg-primary">Amenity: {{ $amenity }} <i class="fas fa-times"></i></span>
+                                    @endforeach
+                                @elseif($key === 'price_range')
+                                    <span class="badge bg-primary">Price: ${{ $value['min'] }} - ${{ $value['max'] }} <i class="fas fa-times"></i></span>
+                                @elseif($key === 'min_capacity')
+                                    <span class="badge bg-primary">Min Capacity: {{ $value }} <i class="fas fa-times"></i></span>
+                                @endif
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="text-muted small">No filters applied</p>
+                    @endif
+                </div>
+                <form action="{{ route('ships.index') }}" method="GET" id="filter-form">
                     <!-- Ship Type Filter -->
                     <div class="mb-4">
                         <h5>Ship Type</h5>
+                        @foreach($shipTypes ?? ['Yacht', 'Speedboat', 'Sailboat', 'Pontoon', 'Fishing Boat', 'Catamaran'] as $type)
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="yacht" name="type[]" value="Yacht">
-                            <label class="form-check-label" for="yacht">Yacht</label>
+                            <input class="form-check-input filter-checkbox" type="checkbox" 
+                                id="{{ strtolower(str_replace(' ', '-', $type)) }}" 
+                                name="type[]" 
+                                value="{{ $type }}"
+                                {{ isset($activeFilters['types']) && in_array($type, $activeFilters['types']) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="{{ strtolower(str_replace(' ', '-', $type)) }}">{{ $type }}</label>
                         </div>
+                        @endforeach
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="speedboat" name="type[]" value="Speedboat">
                             <label class="form-check-label" for="speedboat">Speedboat</label>
@@ -67,25 +98,57 @@
                     <!-- Amenities Filter -->
                     <div class="mb-4">
                         <h5>Amenities</h5>
+                        @foreach($allAmenities ?? ['WiFi', 'Kitchen', 'Air Conditioning', 'BBQ', 'Sound System', 'Fishing Gear', 'Navigation System', 'Cooler', 'Sleeping Quarters', 'Canopy'] as $amenity)
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="wifi" name="amenities[]" value="WiFi">
-                            <label class="form-check-label" for="wifi">WiFi</label>
+                            <input class="form-check-input filter-checkbox" type="checkbox" 
+                                id="{{ strtolower(str_replace(' ', '-', $amenity)) }}" 
+                                name="amenities[]" 
+                                value="{{ $amenity }}"
+                                {{ isset($activeFilters['amenities']) && in_array($amenity, $activeFilters['amenities']) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="{{ strtolower(str_replace(' ', '-', $amenity)) }}">{{ $amenity }}</label>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="kitchen" name="amenities[]" value="Kitchen">
-                            <label class="form-check-label" for="kitchen">Kitchen</label>
+                        @endforeach
+                    </div>
+                    
+                    <!-- Price Range Filter -->
+                    <div class="mb-4">
+                        <h5>Price Range</h5>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="min_price" class="form-label">Min ($)</label>
+                                    <input type="number" class="form-control" id="min_price" name="min_price" 
+                                        min="0" max="2000" step="50" 
+                                        value="{{ $activeFilters['price_range']['min'] ?? 0 }}">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="max_price" class="form-label">Max ($)</label>
+                                    <input type="number" class="form-control" id="max_price" name="max_price" 
+                                        min="0" max="2000" step="50" 
+                                        value="{{ $activeFilters['price_range']['max'] ?? 2000 }}">
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="ac" name="amenities[]" value="Air Conditioning">
-                            <label class="form-check-label" for="ac">Air Conditioning</label>
+                        <div class="mt-2">
+                            <div id="price-range-slider"></div>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="bbq" name="amenities[]" value="BBQ">
-                            <label class="form-check-label" for="bbq">BBQ</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="sound" name="amenities[]" value="Sound System">
-                            <label class="form-check-label" for="sound">Sound System</label>
+                    </div>
+                    
+                    <!-- Capacity Filter -->
+                    <div class="mb-4">
+                        <h5>Capacity</h5>
+                        <div class="form-group">
+                            <label for="min_capacity" class="form-label">Minimum Guests</label>
+                            <select class="form-select" id="min_capacity" name="min_capacity">
+                                <option value="">Any</option>
+                                @for($i = 2; $i <= 15; $i += 2)
+                                    <option value="{{ $i }}" {{ (isset($activeFilters['min_capacity']) && $activeFilters['min_capacity'] == $i) ? 'selected' : '' }}>
+                                        {{ $i }}+ guests
+                                    </option>
+                                @endfor
+                            </select>
                         </div>
                     </div>
                     
@@ -113,32 +176,37 @@
             </div>
             
             <div class="row">
-                @foreach($ships as $ship)
+                @forelse($ships as $ship)
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card ship-card h-100">
                         <div class="position-relative">
-                            <img src="{{ $ship['image'] }}" class="card-img-top" alt="{{ $ship['name'] }}">
-                            <button class="btn btn-sm wishlist-btn position-absolute top-0 end-0 m-2 text-white" style="background: rgba(0,0,0,0.5);" data-ship-id="{{ $ship['id'] }}">
-                                <i class="far fa-heart"></i>
-                            </button>
+                            @if($ship->image)
+                                <img src="{{ asset('storage/' . $ship->image) }}" class="card-img-top" alt="{{ $ship->name }}">
+                            @else
+                                <img src="https://placehold.co/600x400?text=Ship" class="card-img-top" alt="{{ $ship->name }}">
+                            @endif
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">{{ $ship['name'] }}</h5>
+                            <h5 class="card-title">{{ $ship->name }}</h5>
                             <p class="card-text">
-                                <span class="badge bg-primary">{{ $ship['type'] }}</span>
-                                <span class="badge bg-secondary">{{ $ship['capacity'] }} People</span>
+                                <span class="badge bg-primary">{{ $ship->type }}</span>
+                                <span class="badge bg-secondary">{{ $ship->capacity }} People</span>
                             </p>
-                            <p class="card-text fw-bold">${{ $ship['price_per_day'] }} / day</p>
+                            <p class="card-text fw-bold">{{ format_idr((int) $ship->price_per_day) }} / day</p>
                             <p class="card-text small text-muted">
-                                <i class="fas fa-map-marker-alt me-1"></i> Jakarta & Pulau Seribu
+                                <i class="fas fa-map-marker-alt me-1"></i> {{ $ship->location }}
                             </p>
                         </div>
                         <div class="card-footer bg-white border-top-0">
-                            <a href="{{ route('ships.show', $ship['id']) }}" class="btn btn-outline-primary w-100">View Details</a>
+                            <a href="{{ route('ships.show', $ship->id) }}" class="btn btn-outline-primary w-100">View Details</a>
                         </div>
                     </div>
                 </div>
-                @endforeach
+                @empty
+                <div class="col-12">
+                    <div class="alert alert-info text-center">No ships available yet. Please check back later.</div>
+                </div>
+                @endforelse
             </div>
             
             <!-- Pagination -->
